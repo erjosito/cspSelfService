@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="cspWeb.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AppId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">6fba93c9-7ea3-4cf2-9a56-ef806a702dcb</Value>
+    </Setting>
+    <Setting Name="AppSecret" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">fgxy34WFHRjmXnenIbdKovKd5L8UAZnP6VCvm3vQcPQ=</Value>
+    </Setting>
+    <Setting Name="CspUsername" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">jolavall@cspcsap.onmicrosoft.com</Value>
+    </Setting>
+    <Setting Name="CspURL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://api.partnercenter.microsoft.com/v1</Value>
+    </Setting>
+    <Setting Name="CspTenantId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">b2ee99eb-e5b9-470d-90ba-5de814d2f986</Value>
+    </Setting>
+    <Setting Name="AzureOfferId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MS-AZR-0146P</Value>
+    </Setting>
+    <Setting Name="PowershellAppId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">1950a258-227b-4e31-a9cf-717495945fc2</Value>
+    </Setting>
+    <Setting Name="CspPassword" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">M1crosoft123!</Value>
+    </Setting>
+    <Setting Name="MARSurl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://go.microsoft.com/fwLink/?LinkID=288905&amp;clcid=0x0407</Value>
+    </Setting>
+    <Setting Name="MARSurlEssentials" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://go.microsoft.com/fwLink/?LinkID=288906&amp;clcid=0x0407</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

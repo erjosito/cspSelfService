@@ -1,0 +1,62 @@
+﻿@using cspWeb.Models
+@using cspWeb.Helpers
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>CSP self-service</h1>
+    <p class="lead">The objective of this app is to provide a proof-of-concept for a self-service portal, so that customers of a CSP partner
+    can provision Azure services automatically.</p>
+    @{
+        string userId = User.Identity.GetUserId();
+    }
+    @if (userId != null)
+    {
+        {
+            bool vaultExists = ModelTools.UserIdHasRSVault(userId);
+            if (vaultExists)
+            {
+                @Html.ActionLink("Install Backup Client »", "../Services/Details", "Services", new { @class = "btn btn-primary btn-lg" })
+            }
+            else
+            {
+                @Html.ActionLink("Get Azure Backup »", "../Subscriptions/CreateVault", "Subscription", new { @class = "btn btn-primary btn-lg" })
+            }
+        }
+            }
+            else
+            {
+        @Html.ActionLink("Register Here »", "../Account/Login", "Account", new { @class = "btn btn-primary btn-lg" })
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            Learn more about the CSP Partner Center here &raquo; <a href="https://partnercenter.microsoft.com/en-us/partner/cloud-solution-provider">https://partnercenter.microsoft.com/en-us/partner/cloud-solution-provider</a>
+        </p>
+        <p><a class="btn btn-default" href="https://partnercenter.microsoft.com/en-us/partner/cloud-solution-provider">Partner Center &raquo;</a></p>
+
+
+    </div>
+    <div class="col-md-4">
+        <h2>Partner Center SDKs</h2>
+        <p>Find here links to Partner Center SDKs in multiple programming languages:</p>
+        <ul>
+            <li><a href="https://msdn.microsoft.com/en-us/library/partnercenter/mt634708.aspx">C#</a> (used by this application)</li>
+            <li><a href="https://github.com/Microsoft/PartnerCenterPowerShellModule/blob/master/README.md">Powershell</a></li>
+            <li><a href="https://github.com/PartnerCenterSamples/Partner-Center-Java-SDK">Java</a></li>
+            <li><a href="https://github.com/erjosito/CSPpython">Python</a></li>
+        </ul>
+        <p><a class="btn btn-default" href="https://msdn.microsoft.com/de-de/library/partnercenter/mt634708.aspx">Partner Center SDK &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Microsoft Azure</h2>
+        <p>Find more about Azure SDKs here</p>
+        <p><a class="btn btn-default" href="http://aka.ms/azuresdk">Azure SDK &raquo;</a></p>
+    </div>
+</div>
