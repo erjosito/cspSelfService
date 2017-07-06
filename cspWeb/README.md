@@ -7,4 +7,4 @@ In essence, the process consists of 3 steps:
 2. After registering and coming back to the main page, the main button will go to the page to create a Recovery Services Vault.
 3. Finally, the last step is downloading the MARS agent and the vault credentials file (I am still working in this last point)
 
-You can access the app here: 
+You can access the app here: http://cspweb-erjosito.azurewebsites.net/
