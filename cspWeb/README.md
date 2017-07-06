@@ -1,4 +1,4 @@
-﻿#CSP self-service app
+﻿# CSP self-service app
 
 I have done this app to demonstrate what a self-service app for a Microsoft CSP (Cloud Solutions Provider) partner might look like.
 
