@@ -14,12 +14,18 @@ namespace cspWeb.Helpers
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
         public static string cspTenantId = Settings.Default.CspTenantId;
+        public static string cspUsername = Settings.Default.CspUsername;
 
 
         public static string getCspDomain()
         {
-            string[] strArr = cspTenantId.Split('@');
+            string[] strArr = cspUsername.Split('@');
             return strArr[1];
+        }
+
+        public static string getCspTenantId()
+        {
+            return cspTenantId;
         }
 
 
