@@ -141,7 +141,7 @@ namespace cspWeb.Helpers
             // And finally, delete the customer
             try
             {
-                Customer customer = db.Customers.Find(id);
+                Customer customer = db.Customers.Find(customerId);
                 db.Customers.Remove(customer);
                 db.SaveChanges();
             } catch

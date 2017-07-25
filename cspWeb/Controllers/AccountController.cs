@@ -171,15 +171,15 @@ namespace cspWeb.Controllers
                     string userId = user.Id;
                     // Instantiate class
                     var csp = new Helpers.PartnerCenter();
-                    // Creat new customer
-                    string customerId = csp.CreateCspCustomer(customerName, CreateSubscription: true);
+                    // Create new customer
+                    string customerId = await csp.CreateCspCustomerAsync(customerName, CreateSubscription: false);
                     var newCustomer = new Models.Customer();
                     newCustomer.OwnerId = userId;
                     newCustomer.CustomerId = customerId;
                     newCustomer.CustomerName = customerName;
                     db.Customers.Add(newCustomer);
                     // Create new subscription
-                    string subscriptionId = csp.CreateCspSubscription(customerId);
+                    string subscriptionId = await csp.CreateCspSubscriptionAsync(customerId);
                     var newSubscription = new Models.Subscription();
                     newSubscription.CustomerId = customerId;
                     newSubscription.SubscriptionId = subscriptionId.ToLower();

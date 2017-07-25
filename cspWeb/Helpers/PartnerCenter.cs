@@ -11,7 +11,7 @@ using Microsoft.Store.PartnerCenter.Profiles;
 using cspWeb.Properties;
 using cspWeb.Models;
 using System.Threading;
-
+using System.Threading.Tasks;
 
 namespace cspWeb.Helpers
 {
@@ -148,6 +148,57 @@ namespace cspWeb.Helpers
             return newCustomer.Id;
         }
 
+        public async Task<string> CreateCspCustomerAsync(string customerName, bool CreateSubscription = false)
+        {
+            // IAggregatePartner partnerOperations;
+            IAggregatePartner partner = GetPartnerCenterTokenUsingAppCredentials();
+
+            // Get an unique domain, based on the current day/time
+            DateTime myDate = DateTime.Now;
+            string TimePrefix = myDate.Year.ToString() + myDate.Month.ToString() + myDate.Day.ToString() + myDate.Hour.ToString() + myDate.Minute.ToString() + myDate.Second.ToString();
+            string myUniqueDomain = TimePrefix + ".onmicrosoft.com";
+
+            var customerToCreate = new Microsoft.Store.PartnerCenter.Models.Customers.Customer()
+            {
+
+                CompanyProfile = new CustomerCompanyProfile()
+                {
+                    Domain = myUniqueDomain
+                },
+
+                BillingProfile = new CustomerBillingProfile()
+                {
+                    Culture = "EN-US",
+                    Email = "SomeEmail@Outlook.com",
+                    Language = "En",
+                    CompanyName = customerName,
+                    DefaultAddress = new Address()
+                    {
+                        FirstName = "Fake",
+                        LastName = "Name",
+                        AddressLine1 = "One Microsoft Way",
+                        City = "Redmond",
+                        State = "WA",
+                        Country = "US",
+                        PostalCode = "98052",
+                        PhoneNumber = ""
+                    }
+                }
+            };
+            var newCustomer = await partner.Customers.CreateAsync(customerToCreate);
+            if (CreateSubscription)
+            {
+                string SubscriptionId = await CreateCspSubscriptionAsync(newCustomer.Id);
+                //Testing the ARM API does not work until some time (2 minutes) after having created the user
+                //Thread.Sleep(120000);
+                //ARM.createResourceGroup(newCustomer.Id, SubscriptionId, "testRg", "westeurope");
+                //ARM.createSRVault(newCustomer.Id, SubscriptionId, "testRg", "testVault", "westeurope");
+            }
+            return newCustomer.Id;
+        }
+
+
+
         public string CreateCspSubscription (string CustomerId)
         {
             string AzureOfferId = Settings.Default.AzureOfferId;
@@ -168,5 +219,28 @@ namespace cspWeb.Helpers
             var createdOrder = partner.Customers.ById(CustomerId).Orders.Create(order);
             return createdOrder.LineItems.ElementAt(0).SubscriptionId;
         }
+
+        public async Task<string> CreateCspSubscriptionAsync(string CustomerId)
+        {
+            string AzureOfferId = Settings.Default.AzureOfferId;
+            IAggregatePartner partner = GetPartnerCenterTokenUsingAppCredentials();
+            var order = new Order()
+            {
+                ReferenceCustomerId = CustomerId,
+                LineItems = new List<OrderLineItem>()
+                {
+                    new OrderLineItem()
+                    {
+                        OfferId = AzureOfferId,
+                        FriendlyName = "Azure Subscription",
+                        Quantity = 5
+                    }
+                }
+            };
+            var createdOrder = await partner.Customers.ById(CustomerId).Orders.CreateAsync(order);
+            return createdOrder.LineItems.ElementAt(0).SubscriptionId;
+        }
+
+
     }
 }
