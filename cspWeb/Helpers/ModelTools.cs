@@ -52,6 +52,17 @@ namespace cspWeb.Helpers
             return subscriptionList;
         }
 
+        public static List<Models.Subscription> GetSubscriptionsFromCustomerID(string customerId)
+        {
+            return db.Subscriptions.Where(s => s.CustomerId == customerId).ToList();
+        }
+
+        public static List<Models.Service> GetServicesFromSubscriptionID(string subscriptionId)
+        {
+            return db.Services.Where(s => s.SubscriptionId == subscriptionId).ToList();
+        }
+
+
         public static List<Models.Service> GetServicesFromUserID(string userId)
         {
             var subscriptionList = GetSubscriptionsFromUserID(userId);
@@ -82,6 +93,63 @@ namespace cspWeb.Helpers
             return aux;
         }
 
+        public static bool DeleteServiceId (string serviceId)
+        {
+            try
+            {
+                Service service = db.Services.Find(serviceId);
+                db.Services.Remove(service);
+                db.SaveChanges();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool DeleteSubscriptionId(string subId)
+        {
+            try
+            {
+                Subscription sub = db.Subscriptions.Find(subId);
+                db.Subscriptions.Remove(sub);
+                db.SaveChanges();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool DeleteCustomerId (string customerId)
+        {
+            // Loop through all subs belonging to the customer
+            var subscriptionsList = GetSubscriptionsFromCustomerID(customerId);
+            foreach (var sub in subscriptionsList)
+            {
+                // Loop through all services for those subs
+                var servicesList = GetServicesFromSubscriptionID(sub.SubscriptionId);
+                foreach (var service in servicesList)
+                {
+                    DeleteServiceId(service.Id);
+                }
+                DeleteSubscriptionId(sub.SubscriptionId);
+            }
+
+            // And finally, delete the customer
+            try
+            {
+                Customer customer = db.Customers.Find(id);
+                db.Customers.Remove(customer);
+                db.SaveChanges();
+            } catch
+            {
+                return false;
+            }
+            return true;
+        }
 
     }
 }

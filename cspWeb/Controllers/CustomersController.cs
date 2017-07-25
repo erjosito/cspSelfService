@@ -176,9 +176,9 @@ namespace cspWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            Customer customer = db.Customers.Find(id);
-            db.Customers.Remove(customer);
-            db.SaveChanges();
+            // Delete customer from the database
+            ModelTools.DeleteCustomerId(id);
+            // Delete customer from Partner Center
             var csp = new PartnerCenter();
             csp.DeleteCspCustomer(id);
             return RedirectToAction("Index");
