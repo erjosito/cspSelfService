@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - CSP Self Service</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @using cspWeb.Helpers
 
     <script type = 'text/javascript' >
         var appInsights=window.appInsights||function(config)
@@ -47,7 +48,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - CSP Self-Service Application</p>
+            <p>&copy; @DateTime.Now.Year - CSP Self-Service Application - @ModelTools.getCspDomain()</p>
         </footer>
     </div>
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using cspWeb.Models;
+using cspWeb.Properties;
 
 
 
@@ -12,6 +13,15 @@ namespace cspWeb.Helpers
     public static class ModelTools
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
+        public static string cspTenantId = Settings.Default.CspTenantId;
+
+
+        public static string getCspDomain()
+        {
+            string[] strArr = cspTenantId.Split('@');
+            return strArr[1];
+        }
+
 
         public static List<Models.Customer> GetCustomersFromUserID (string userId)
         {

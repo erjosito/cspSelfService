@@ -28,7 +28,12 @@ namespace cspWeb.Helpers
         public static string ApplicationId = Settings.Default.AppId;
         public static string ApplicationSecret = Settings.Default.AppSecret;
         public static string ApplicationDomain = Settings.Default.CspTenantId;
-
+    
+        public string getCspDomain()
+        {
+            string[] strArr = ApplicationDomain.Split('@');
+            return strArr[1];
+        }
 
         public IAggregatePartner GetPartnerCenterTokenUsingAppCredentials()
         {

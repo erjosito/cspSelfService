@@ -33,6 +33,12 @@ namespace cspWeb.Controllers
                 var servicesList = ModelTools.GetServicesFromUserID(User.Identity.GetUserId());
                 if (servicesList.Count > 0)
                 {
+                    //var myService = new ServiceViewModel();
+                    //myService.SubscriptionId = servicesList[0].SubscriptionId;
+                    //myService.Description = servicesList[0].Description;
+                    //myService.Id = servicesList[0].Id;
+                    //myService.cspTenantId = null;
+
                     // Just pick the first one
                     return View(servicesList[0]);
                 }
