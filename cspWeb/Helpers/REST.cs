@@ -13,12 +13,12 @@ namespace cspWeb.Helpers
     public static class REST
     {
 
-        public static string ApplicationDomain = Settings.Default.CspTenantId;
-        public static string ApplicationId = Settings.Default.AppId;
-        public static string ApplicationSecret = Settings.Default.AppSecret;
-        public static string CspUsername = Settings.Default.CspUsername;
-        public static string CspPassword = Settings.Default.CspPassword;
-        public static string PowershellAppId = Settings.Default.PowershellAppId;
+        public static string ApplicationDomain = System.Configuration.ConfigurationManager.AppSettings["CspTenantId"];
+        public static string ApplicationId = System.Configuration.ConfigurationManager.AppSettings["AppId"];
+        public static string ApplicationSecret = System.Configuration.ConfigurationManager.AppSettings["AppSecret"];
+        public static string CspUsername = System.Configuration.ConfigurationManager.AppSettings["CspUsername"];
+        public static string CspPassword = System.Configuration.ConfigurationManager.AppSettings["CspPassword"];
+        public static string PowershellAppId = System.Configuration.ConfigurationManager.AppSettings["PowershellAppId"];
 
 
         public static JObject sendHttpRequest (string method, string url, string token = null, string payload = null, string contentType = "application/json", string accept = "application/json")

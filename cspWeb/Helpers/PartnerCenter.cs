@@ -25,9 +25,9 @@ namespace cspWeb.Helpers
         public static string PartnerServiceApiRoot = "https://api.partnercenter.microsoft.com";
         public static string Authority = "https://login.windows.net";
         public static string ResourceUrl = "https://graph.windows.net";
-        public static string ApplicationId = Settings.Default.AppId;
-        public static string ApplicationSecret = Settings.Default.AppSecret;
-        public static string ApplicationDomain = Settings.Default.CspTenantId;
+        public static string ApplicationId = System.Configuration.ConfigurationManager.AppSettings["AppId"];
+        public static string ApplicationSecret = System.Configuration.ConfigurationManager.AppSettings["AppSecret"];
+        public static string ApplicationDomain = System.Configuration.ConfigurationManager.AppSettings["CspTenantId"];
     
         public string getCspDomain()
         {

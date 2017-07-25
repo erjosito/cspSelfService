@@ -7,14 +7,13 @@ using cspWeb.Models;
 using cspWeb.Properties;
 
 
-
 namespace cspWeb.Helpers
 {
     public static class ModelTools
     {
         private static ApplicationDbContext db = new ApplicationDbContext();
-        public static string cspTenantId = Settings.Default.CspTenantId;
-        public static string cspUsername = Settings.Default.CspUsername;
+        public static string cspTenantId = System.Configuration.ConfigurationManager.AppSettings["CspTenantId"];
+        public static string cspUsername = System.Configuration.ConfigurationManager.AppSettings["CspUsername"];
 
 
         public static string getCspDomain()
