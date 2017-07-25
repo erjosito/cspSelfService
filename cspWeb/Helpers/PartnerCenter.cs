@@ -80,6 +80,15 @@ namespace cspWeb.Helpers
             REST.sendHttpRequest(method, url, token);
         }
 
+        public async Task<> DeleteCspCustomerAsync(string CustomerId)
+        {
+            string token = REST.getCspToken();
+            string url = "https://api.partnercenter.microsoft.com/v1/customers/" + CustomerId;
+            string method = "DELETE";
+            await REST.sendHttpRequestAsync(method, url, token);
+        }
+
+
         public Models.Customer GetUserCspCustomers(string CustomerId)
         {
             IAggregatePartner partner = GetPartnerCenterTokenUsingAppCredentials();

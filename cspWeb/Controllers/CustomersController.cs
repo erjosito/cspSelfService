@@ -11,6 +11,7 @@ using Microsoft.Store.PartnerCenter;
 using cspWeb.Properties;
 using cspWeb.Helpers;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 
 namespace cspWeb.Controllers
 {
@@ -174,13 +175,13 @@ namespace cspWeb.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public async Task<ActionResult> DeleteConfirmed(string id)
         {
             // Delete customer from the database
             ModelTools.DeleteCustomerId(id);
             // Delete customer from Partner Center
             var csp = new PartnerCenter();
-            csp.DeleteCspCustomer(id);
+            await csp.DeleteCspCustomerAsync(id);
             return RedirectToAction("Index");
         }
 
