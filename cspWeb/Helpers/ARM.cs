@@ -18,6 +18,7 @@ using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
 using System.Threading;
+using System.Threading.Tasks;
 
 
 
@@ -39,6 +40,21 @@ namespace cspWeb.Helpers
             return rg;
         }
 
+        public static async Task<string> createResourceGroupAsync(string customerId, string subscriptionId, string groupName, string location)
+        {
+            string rg = null;
+            do
+            {
+                rg = await createResourceGroupTryAsync(customerId, subscriptionId, groupName, location);
+                if (rg == null)
+                {
+                    Thread.Sleep(15000);
+                }
+            } while (rg == null);
+            return rg;
+        }
+
+
         private static string createResourceGroupTry (string customerId, string subscriptionId, string groupName, string location)
         {
             string token = REST.getArmToken(customerId, UserAuth: true);
@@ -55,6 +71,24 @@ namespace cspWeb.Helpers
                 return null;
             }
         }
+
+        private static async Task<string> createResourceGroupTryAsync(string customerId, string subscriptionId, string groupName, string location)
+        {
+            string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
+            var credential = new TokenCredentials(token);
+            var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
+            var resourceGroup = new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location };
+            try
+            {
+                var rg = await armClient.ResourceGroups.CreateOrUpdateAsync(groupName, resourceGroup);
+                return rg.Id.ToString();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
 
         public static void registerRS(string customerId, string subscriptionId, string rpName)
         {
@@ -93,6 +127,43 @@ namespace cspWeb.Helpers
         }
 
 
+        public static async Task registerRSAsync(string customerId, string subscriptionId, string rpName)
+        {
+            string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
+            var credential = new TokenCredentials(token);
+            var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
+            bool rpRegistered = false;
+            // Check the registration state until it is Registered. Wait 5 seconds before each retry
+            do
+            {
+                var RPlist = (await armClient.Providers.ListAsync()).ToList();
+                foreach (var provider in RPlist)
+                {
+                    if (provider.NamespaceProperty == rpName)
+                    {
+                        if (provider.RegistrationState == "NotRegistered")
+                        {
+                            await armClient.Providers.RegisterAsync(rpName);
+                        }
+                        else
+                        {
+                            if (provider.RegistrationState == "Registered")
+                            {
+                                rpRegistered = true;
+                            }
+                            else
+                            {
+                                Thread.Sleep(5000);
+                            }
+                        }
+
+                    }
+                }
+
+            } while (rpRegistered == false);
+        }
+
+
         public static string createSRVault(string customerId, string subscriptionId, string groupName, string vaultName, string location)
         {
             // Do we need to register the resource provider because it is a sandbox???
@@ -107,6 +178,24 @@ namespace cspWeb.Helpers
                 Properties = new VaultProperties()
             };
             var newVault = VaultClient.Vaults.CreateOrUpdate(groupName, vaultName, vault);
+            //return VaultClient
+            return newVault.Id.ToString();
+        }
+
+        public static async Task<string> createSRVaultAsync(string customerId, string subscriptionId, string groupName, string vaultName, string location)
+        {
+            // Do we need to register the resource provider because it is a sandbox???
+            await registerRSAsync(customerId, subscriptionId, "Microsoft.RecoveryServices");
+            string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
+            var credential = new TokenCredentials(token);
+            var VaultClient = new RecoveryServicesClient(credential) { SubscriptionId = subscriptionId };
+            Vault vault = new Vault()
+            {
+                Location = location,
+                Sku = new Microsoft.Azure.Management.RecoveryServices.Models.Sku() { Name = SkuName.Standard },
+                Properties = new VaultProperties()
+            };
+            var newVault = await VaultClient.Vaults.CreateOrUpdateAsync(groupName, vaultName, vault);
             //return VaultClient
             return newVault.Id.ToString();
         }

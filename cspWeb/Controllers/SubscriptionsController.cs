@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using cspWeb.Models;
 using cspWeb.Helpers;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
 
 namespace cspWeb.Controllers
 {
@@ -200,7 +201,7 @@ namespace cspWeb.Controllers
         // POST: Subscriptions/CreateVault/5
         [HttpPost, ActionName("CreateVault")]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateVaultConfirmed(Models.Subscription sub)
+        public async Task<ActionResult> CreateVaultConfirmed(Models.Subscription sub)
         {
             if (sub == null)
             {
@@ -212,8 +213,11 @@ namespace cspWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
-            ARM.createResourceGroup(subscription.CustomerId, subscription.SubscriptionId, "testRg", "westeurope");
-            string VaultId = ARM.createSRVault(subscription.CustomerId, subscription.SubscriptionId, "testRg", "testVault", "westeurope");
+
+            // Create ARM Resource Group and Recovery Services Vault
+            await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "westeurope");
+            string VaultId = await ARM.createSRVaultAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "testVault", "westeurope");
+
             Models.Service newService = new Models.Service()
             {
                 SubscriptionId = subscription.SubscriptionId,
