@@ -12,7 +12,7 @@ namespace cspWeb.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,46 +25,10 @@ namespace cspWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("6fba93c9-7ea3-4cf2-9a56-ef806a702dcb")]
-        public string AppId {
-            get {
-                return ((string)(this["AppId"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("fgxy34WFHRjmXnenIbdKovKd5L8UAZnP6VCvm3vQcPQ=")]
-        public string AppSecret {
-            get {
-                return ((string)(this["AppSecret"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("jolavall@cspcsap.onmicrosoft.com")]
-        public string CspUsername {
-            get {
-                return ((string)(this["CspUsername"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://api.partnercenter.microsoft.com/v1")]
         public string CspURL {
             get {
                 return ((string)(this["CspURL"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("b2ee99eb-e5b9-470d-90ba-5de814d2f986")]
-        public string CspTenantId {
-            get {
-                return ((string)(this["CspTenantId"]));
             }
         }
         
@@ -88,15 +52,6 @@ namespace cspWeb.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("M1crosoft123!")]
-        public string CspPassword {
-            get {
-                return ((string)(this["CspPassword"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://go.microsoft.com/fwLink/?LinkID=288905&clcid=0x0407")]
         public string MARSurl {
             get {
@@ -110,6 +65,51 @@ namespace cspWeb.Properties {
         public string MARSurlEssentials {
             get {
                 return ((string)(this["MARSurlEssentials"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("yourCspAppIdGuid")]
+        public string AppId {
+            get {
+                return ((string)(this["AppId"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("yourAppSecret")]
+        public string AppSecret {
+            get {
+                return ((string)(this["AppSecret"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("adminuser@yourcspdomain.onmicrosoft.com")]
+        public string CspUsername {
+            get {
+                return ((string)(this["CspUsername"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("yourCspPassword")]
+        public string CspPassword {
+            get {
+                return ((string)(this["CspPassword"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("yourCspTenantId")]
+        public string CspTenantId {
+            get {
+                return ((string)(this["CspTenantId"]));
             }
         }
     }
