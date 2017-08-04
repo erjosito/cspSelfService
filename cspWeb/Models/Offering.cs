@@ -11,5 +11,6 @@ namespace cspWeb.Models
 
         public string Description { get; set; }
 
+        public bool Available { get; set; }
     }
 }
