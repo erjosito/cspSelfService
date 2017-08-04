@@ -79,6 +79,20 @@ namespace cspWeb.Helpers
             return serviceList;
         }
 
+        public static List<Models.Service> AddEmptyOfferings(List<Models.Service> serviceList) {
+            var offerings = db.Offerings.ToList();
+            foreach (var offering in offerings)
+            {
+                Models.Service newService = null;
+                newService.Id = null;
+                newService.Description = offering.Description;
+                newService.SubscriptionId = null;
+                newService.OfferingId = offering.Id;
+                serviceList.Add(newService);
+            }
+            return serviceList;
+        }
+
         public static bool UserIdHasRSVault(string userId)
         {
             var servicesList = GetServicesFromUserID(userId);

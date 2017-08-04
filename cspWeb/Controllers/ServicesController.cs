@@ -19,9 +19,19 @@ namespace cspWeb.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Services
+        [Authorize]
         public ActionResult Index()
         {
-            return View(db.Services.ToList());
+            if (User.IsInRole("Admin"))
+            {
+                return View(db.Services.ToList());
+            }
+            else
+            {
+                var servicesList = ModelTools.GetServicesFromUserID(User.Identity.GetUserId());
+                servicesList = ModelTools.AddEmptyOfferings(servicesList);
+                return View(servicesList);
+            }
         }
 
         // GET: Services/Details/5

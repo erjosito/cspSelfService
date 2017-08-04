@@ -221,7 +221,8 @@ namespace cspWeb.Controllers
             Models.Service newService = new Models.Service()
             {
                 SubscriptionId = subscription.SubscriptionId,
-                Description = "RSVault",
+                OfferingId = "RSVault",
+                Description = "Backup as a Service",
                 Id = VaultId
             };
             db.Services.Add(newService);

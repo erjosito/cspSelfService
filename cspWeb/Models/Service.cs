@@ -11,7 +11,10 @@ namespace cspWeb.Models
         [DisplayName("Subscription Id")]
         public string SubscriptionId { get; set; }
 
-        [DisplayName("Service Description")]
+        [DisplayName("Offering Id")]
+        public string OfferingId { get; set; }
+
+        [DisplayName("Service Code")]
         public string Description { get; set; }
 
         [DisplayName("Service Id")]

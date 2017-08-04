@@ -29,9 +29,31 @@
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @{
+                string subscriptionId = item.SubscriptionId;
+                string description = item.Description;
+                string offeringId = item.OfferingId;
+            }
+            @if (subscriptionId == null)
+            {
+                if (offeringId == "RSVault")
+                {
+                    @Html.ActionLink("Buy " + description + " »", "../Subscriptions/CreateVault", "Subscriptions", new { @class = "btn btn-primary btn-lg" })
+                }
+                else
+                {
+                    string sorryMsg = "Offering not available for purchasing yet";
+                    @sorryMsg;
+                }
+            }
+            else
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+
+
+            }
         </td>
     </tr>
 }
