@@ -205,15 +205,20 @@ namespace cspWeb.Controllers
         {
             if (sub == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "No subscription passed on to the function to create vault");
             }
             string subscriptionId = sub.SubscriptionId;
             Subscription subscription = db.Subscriptions.Find(subscriptionId);
             if (subscription == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "A valid Azure subscription could not be found");
             }
-
+            // Test auth is working
+            string token = await Helpers.REST.getArmTokenAsync(subscription.CustomerId, UserAuth: true);
+            if (token == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "ARM token could not be retrieved");
+            }
             // Create ARM Resource Group and Recovery Services Vault
             await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "westeurope");
             string VaultId = await ARM.createSRVaultAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "testVault", "westeurope");

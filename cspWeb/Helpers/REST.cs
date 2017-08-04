@@ -199,18 +199,16 @@ namespace cspWeb.Helpers
                           + ApplicationId + "&client_secret=" + ApplicationSecret;
             }
             JObject jsonResponse = await sendHttpRequestAsync("POST", url, payload: payload, contentType: contentType);
-            string token = jsonResponse["access_token"].ToString();
-            if (token != null)
+            string token = null;
+            try
             {
-                return token;
+                token = jsonResponse["access_token"].ToString();
             }
-            else
+            catch
             {
                 return null;
             }
+            return token;
         }
-
-
-
     }
 }

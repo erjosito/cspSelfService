@@ -58,15 +58,22 @@ namespace cspWeb.Helpers
         private static string createResourceGroupTry (string customerId, string subscriptionId, string groupName, string location)
         {
             string token = REST.getArmToken(customerId, UserAuth: true);
-            var credential = new TokenCredentials(token);
-            var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
-            var resourceGroup = new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location };
-            try
+            if (token != null)
             {
-                var rg = armClient.ResourceGroups.CreateOrUpdate(groupName, resourceGroup);
-                return rg.Id.ToString();
+                var credential = new TokenCredentials(token);
+                var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
+                var resourceGroup = new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location };
+                try
+                {
+                    var rg = armClient.ResourceGroups.CreateOrUpdate(groupName, resourceGroup);
+                    return rg.Id.ToString();
+                }
+                catch
+                {
+                    return null;
+                }
             }
-            catch
+            else
             {
                 return null;
             }
@@ -75,15 +82,22 @@ namespace cspWeb.Helpers
         private static async Task<string> createResourceGroupTryAsync(string customerId, string subscriptionId, string groupName, string location)
         {
             string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
-            var credential = new TokenCredentials(token);
-            var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
-            var resourceGroup = new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location };
-            try
+            if (token != null)
             {
-                var rg = await armClient.ResourceGroups.CreateOrUpdateAsync(groupName, resourceGroup);
-                return rg.Id.ToString();
+                var credential = new TokenCredentials(token);
+                var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
+                var resourceGroup = new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location };
+                try
+                {
+                    var rg = await armClient.ResourceGroups.CreateOrUpdateAsync(groupName, resourceGroup);
+                    return rg.Id.ToString();
+                }
+                catch
+                {
+                    return null;
+                }
             }
-            catch
+            else
             {
                 return null;
             }
