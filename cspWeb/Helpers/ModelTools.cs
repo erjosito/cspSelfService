@@ -100,7 +100,7 @@ namespace cspWeb.Helpers
             bool aux = false;
             foreach (var service in servicesList)
             {
-                if (service.Description == "RSVault")
+                if (service.OfferingId == "RSVault")
                 {
                     aux = true;
                 }

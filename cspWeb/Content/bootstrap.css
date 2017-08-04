@@ -222,6 +222,7 @@ textarea {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  vertical-align: middle;
 }
 
 @media print {
@@ -1417,6 +1418,7 @@ th {
 .table {
   width: 100%;
   margin-bottom: 20px;
+  vertical-align: middle;
 }
 
 .table thead > tr > th,
