@@ -35,7 +35,7 @@ namespace cspWeb.Controllers
         }
 
         // GET: Services/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(string id = null)
         {
             if (id == null)
             {
@@ -57,12 +57,15 @@ namespace cspWeb.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
             }
-            Service service = db.Services.Find(id);
-            if (service == null)
+            else
             {
-                return HttpNotFound();
+                Service service = db.Services.Find(id);
+                if (service == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(service);
             }
-            return View(service);
         }
 
         // GET: Services/Create

@@ -48,12 +48,15 @@
             }
             else
             {
-                string separator = " | ";
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                @separator
-                @Html.ActionLink("Details", "Details", new { id = item.Id })
-                @separator
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                string useMsg = "You own this service ";
+                @useMsg;
+                @Html.ActionLink("Use this service »", "Details", "Services", new { @class = "btn btn-primary btn-lg" })
+                //string separator = " | ";
+                //@Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                //@separator
+                //@Html.ActionLink("Details", "Details", new { id = item.Id })
+                //@separator
+                //@Html.ActionLink("Delete", "Delete", new { id = item.Id })
             }
         </td>
     </tr>
