@@ -296,6 +296,7 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OfferingsController.cs" />
     <Compile Include="Controllers\ServicesController.cs" />
     <Compile Include="Controllers\SubscriptionsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -323,6 +324,7 @@
     <Compile Include="Models\CustomerViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Offering.cs" />
     <Compile Include="Models\ServiceViewModel.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\Subscription.cs" />
@@ -418,6 +420,11 @@
     <Content Include="Views\Services\Details.cshtml" />
     <Content Include="Views\Services\Edit.cshtml" />
     <Content Include="Views\Services\Index.cshtml" />
+    <Content Include="Views\Offerings\Create.cshtml" />
+    <Content Include="Views\Offerings\Delete.cshtml" />
+    <Content Include="Views\Offerings\Details.cshtml" />
+    <Content Include="Views\Offerings\Edit.cshtml" />
+    <Content Include="Views\Offerings\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201707022001379_InitialCreate.resx">

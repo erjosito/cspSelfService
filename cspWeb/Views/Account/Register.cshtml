@@ -34,7 +34,16 @@
             <input type="submit" class="btn btn-default" value="Register" />
         </div>
     </div>
-    <p>The registration process can take up to 2 minutes</p>
+    <div>
+        <hr />
+        <p>
+            The registration process can take up to 2 minutes (an Azure subscription is created at the same time), please be patient
+        </p>
+        <hr />
+        <p>
+            You already have an account? @Html.ActionLink("Login as an existing user here", "Login")
+        </p>
+    </div>
 }
 
 @section Scripts {

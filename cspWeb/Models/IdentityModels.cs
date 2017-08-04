@@ -35,5 +35,7 @@ namespace cspWeb.Models
         public System.Data.Entity.DbSet<cspWeb.Models.Subscription> Subscriptions { get; set; }
 
         public System.Data.Entity.DbSet<cspWeb.Models.Service> Services { get; set; }
+
+        public System.Data.Entity.DbSet<cspWeb.Models.Offering> Offerings { get; set; }
     }
 }
