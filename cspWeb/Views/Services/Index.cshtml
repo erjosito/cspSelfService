@@ -22,10 +22,10 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        <td valign="middle">
             @Html.DisplayFor(modelItem => item.SubscriptionId)
         </td>
-        <td>
+        <td valign="middle">
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
@@ -48,7 +48,7 @@
             }
             else
             {
-                string useMsg = "You own this service ";
+                string useMsg = "You own this<br>";
                 @useMsg;
                 @Html.ActionLink("Use this service »", "Details", "Services", new { @class = "btn btn-primary btn-lg" })
                 //string separator = " | ";
