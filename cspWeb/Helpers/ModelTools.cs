@@ -80,17 +80,18 @@ namespace cspWeb.Helpers
         }
 
         public static List<Models.Service> AddEmptyOfferings(List<Models.Service> serviceList) {
-            var offerings = db.Offerings.ToList();
-            foreach (var offering in offerings)
+            var newServiceList = serviceList; 
+            var offeringsList = db.Offerings.ToList();
+            foreach (var offering in offeringsList)
             {
-                Models.Service newService = null;
+                var newService = new Models.Service();
                 newService.Id = null;
-                newService.Description = offering.Description;
                 newService.SubscriptionId = null;
+                newService.Description = offering.Description;
                 newService.OfferingId = offering.Id;
-                serviceList.Add(newService);
+                newServiceList.Add(newService);
             }
-            return serviceList;
+            return newServiceList;
         }
 
         public static bool UserIdHasRSVault(string userId)
