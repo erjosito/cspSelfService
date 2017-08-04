@@ -48,11 +48,12 @@
             }
             else
             {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                string separator = " | ";
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                @separator
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                @separator
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-
-
             }
         </td>
     </tr>
