@@ -227,7 +227,7 @@ namespace cspWeb.Controllers
             };
             db.Services.Add(newService);
             db.SaveChanges();
-            return RedirectToAction("../Home/Index");
+            return RedirectToAction("../Services/Index");
         }
 
 
