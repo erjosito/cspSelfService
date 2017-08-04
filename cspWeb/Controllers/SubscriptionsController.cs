@@ -217,7 +217,7 @@ namespace cspWeb.Controllers
             string token = await Helpers.REST.getArmTokenAsync(subscription.CustomerId, UserAuth: true);
             if (token == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "ARM token could not be retrieved");
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "ARM token could not be retrieved for customer " + subscription.CustomerId);
             }
             // Create ARM Resource Group and Recovery Services Vault
             await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "westeurope");
