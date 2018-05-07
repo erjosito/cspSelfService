@@ -1,0 +1,3 @@
+﻿<connectionStrings>
+  <add name="DefaultConnection" connectionString="Server=tcp:mySqlDbServer.database.windows.net,1433;Initial Catalog=mySqlDb;Persist Security Info=False;User ID=mySqlUsr;Password=mySqlPassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" providerName="System.Data.SqlClient" />
+</connectionStrings>
