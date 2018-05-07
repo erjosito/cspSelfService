@@ -123,18 +123,37 @@ namespace cspWeb.Controllers
         }
 
         // GET: Services/Delete/5
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string id = null)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                // Find services for this user
+                var servicesList = ModelTools.GetServicesFromUserID(User.Identity.GetUserId());
+                if (servicesList.Count > 0)
+                {
+                    //var myService = new ServiceViewModel();
+                    //myService.SubscriptionId = servicesList[0].SubscriptionId;
+                    //myService.Description = servicesList[0].Description;
+                    //myService.Id = servicesList[0].Id;
+                    //myService.cspTenantId = null;
+
+                    // Just pick the first one
+                    return View(servicesList[0]);
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
             }
-            Service service = db.Services.Find(id);
-            if (service == null)
+            else
             {
-                return HttpNotFound();
+                Service service = db.Services.Find(id);
+                if (service == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(service);
             }
-            return View(service);
         }
 
         // POST: Services/Delete/5
@@ -145,6 +164,7 @@ namespace cspWeb.Controllers
             Service service = db.Services.Find(id);
             string rgName = ARM.GetResourceGroupNameFromId(id);
             string subId = ARM.GetSubscriptionFromId(id);
+            // Instead of taking the first customerId, some additional logic would be desirable
             var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
             ARM.deleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
             db.Services.Remove(service);
