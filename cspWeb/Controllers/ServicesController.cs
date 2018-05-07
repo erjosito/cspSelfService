@@ -35,7 +35,7 @@ namespace cspWeb.Controllers
         }
 
         // GET: Services/Details/5
-        public ActionResult Details(string id = null)
+        public ActionResult Details(int? id = null)
         {
             if (id == null)
             {
@@ -79,7 +79,7 @@ namespace cspWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,SubscriptionId,Description")] Service service)
+        public ActionResult Create([Bind(Include = "Id,SubscriptionId,Description,ResourceId")] Service service)
         {
             if (ModelState.IsValid)
             {
@@ -123,7 +123,7 @@ namespace cspWeb.Controllers
         }
 
         // GET: Services/Delete/5
-        public ActionResult Delete(string id = null)
+        public ActionResult Delete(int? id = null)
         {
             if (id == null)
             {
@@ -159,11 +159,12 @@ namespace cspWeb.Controllers
         // POST: Services/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(int? id)
         {
             Service service = db.Services.Find(id);
-            string rgName = ARM.GetResourceGroupNameFromId(id);
-            string subId = ARM.GetSubscriptionFromId(id);
+            string resourceId = service.ResourceId;
+            string rgName = ARM.GetResourceGroupNameFromId(resourceId);
+            string subId = ARM.GetSubscriptionFromId(resourceId);
             // Instead of taking the first customerId, some additional logic would be desirable
             var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
             ARM.deleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);

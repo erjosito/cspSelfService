@@ -1,0 +1,47 @@
+﻿@model cspWeb.Models.Subscription
+
+@{
+    ViewBag.Title = "Create VMs";
+}
+
+<h2>Create Virtual Machines</h2>
+
+<h3>Are you sure you want to create Virtual Machines in this subscription?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CustomerId)
+        </dd>
+
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SubscriptionId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SubscriptionId)
+        </dd>
+
+    </dl>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.SubscriptionId)
+        <div class="form-actions no-color">
+            <input type="submit" value="Create" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
+
+<div>
+    <hr />
+    <p>Creating virtual machines can take up to 5 minutes, please be patient after hitting the Create button</p>
+</div>

@@ -18,6 +18,9 @@ namespace cspWeb.Models
         public string Description { get; set; }
 
         [DisplayName("Service Id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
+
+        [DisplayName("ResourceId")]
+        public string ResourceId { get; set; }
     }
 }

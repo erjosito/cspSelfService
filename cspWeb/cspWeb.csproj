@@ -335,6 +335,18 @@
     <Compile Include="Migrations\201708041821082_Available Field in Offering Model.Designer.cs">
       <DependentUpon>201708041821082_Available Field in Offering Model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201805071215368_resourceId in Service model.cs" />
+    <Compile Include="Migrations\201805071215368_resourceId in Service model.Designer.cs">
+      <DependentUpon>201805071215368_resourceId in Service model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805071230065_RgName in Offering Model.cs" />
+    <Compile Include="Migrations\201805071230065_RgName in Offering Model.Designer.cs">
+      <DependentUpon>201805071230065_RgName in Offering Model.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805071239010_Service Id to int.cs" />
+    <Compile Include="Migrations\201805071239010_Service Id to int.Designer.cs">
+      <DependentUpon>201805071239010_Service Id to int.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -447,6 +459,7 @@
     <Content Include="Views\Offerings\Details.cshtml" />
     <Content Include="Views\Offerings\Edit.cshtml" />
     <Content Include="Views\Offerings\Index.cshtml" />
+    <Content Include="Views\Subscriptions\CreateVMs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201707022001379_InitialCreate.resx">
@@ -469,6 +482,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708041821082_Available Field in Offering Model.resx">
       <DependentUpon>201708041821082_Available Field in Offering Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805071215368_resourceId in Service model.resx">
+      <DependentUpon>201805071215368_resourceId in Service model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805071230065_RgName in Offering Model.resx">
+      <DependentUpon>201805071230065_RgName in Offering Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805071239010_Service Id to int.resx">
+      <DependentUpon>201805071239010_Service Id to int.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

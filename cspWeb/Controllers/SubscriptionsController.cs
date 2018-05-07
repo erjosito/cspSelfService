@@ -220,15 +220,16 @@ namespace cspWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "ARM token could not be retrieved for customer " + subscription.CustomerId);
             }
             // Create ARM Resource Group and Recovery Services Vault
-            await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "westeurope");
-            string VaultId = await ARM.createSRVaultAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "testVault", "westeurope");
+            string RgName = ModelTools.GetOfferingRGName("RSVault");
+            await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "westeurope");
+            string VaultId = await ARM.createSRVaultAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "testVault", "westeurope");
 
             Models.Service newService = new Models.Service()
             {
                 SubscriptionId = subscription.SubscriptionId,
                 OfferingId = "RSVault",
                 Description = "Backup as a Service",
-                Id = VaultId
+                ResourceId = VaultId
             };
             db.Services.Add(newService);
             db.SaveChanges();
@@ -311,15 +312,17 @@ namespace cspWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "ARM token could not be retrieved for customer " + subscription.CustomerId);
             }
             // Create ARM Resource Group and Recovery Services Vault
-            await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "westeurope");
-            string VMId = await ARM.createVMsAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "testVM", "westeurope");
+            string RgName = ModelTools.GetOfferingRGName("20ApacheVms");
+            await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "westeurope");
+            string VMId = await ARM.createVMsAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "testVM", "westeurope");
 
             Models.Service newService = new Models.Service()
             {
+                Id = ModelTools.NextServiceId(),
                 SubscriptionId = subscription.SubscriptionId,
                 OfferingId = "20ApacheVms",
                 Description = "20 Apache VMs",
-                Id = VMId
+                ResourceId = VMId
             };
             db.Services.Add(newService);
             db.SaveChanges();

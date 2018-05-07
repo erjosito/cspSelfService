@@ -85,7 +85,7 @@ namespace cspWeb.Helpers
             foreach (var offering in offeringsList)
             {
                 var newService = new Models.Service();
-                newService.Id = null;
+                newService.ResourceId = null;
                 newService.SubscriptionId = null;
                 newService.Description = offering.Description;
                 newService.OfferingId = offering.Id;
@@ -108,7 +108,7 @@ namespace cspWeb.Helpers
             return aux;
         }
 
-        public static bool DeleteServiceId (string serviceId)
+        public static bool DeleteServiceId (int serviceId)
         {
             try
             {
@@ -136,6 +136,37 @@ namespace cspWeb.Helpers
                 return false;
             }
             return true;
+        }
+
+        public static string GetOfferingRGName(string OfferingId)
+        {
+            //Initialization
+            string rgName = "";
+            // Loop through all subs belonging to the customer
+            var offeringsList = db.Offerings.ToList();
+            foreach (var offering in offeringsList)
+            {
+                if (offering.Id == OfferingId) {
+                    rgName = offering.RgName;
+                }
+            }
+            return rgName;
+        }
+
+        public static int NextServiceId()
+        {
+            //Initialization
+            int counter = 1;
+            // Loop through all existing services
+            var servicesList = db.Services.ToList();
+            foreach (var service in servicesList)
+            {
+                if (service.Id >= counter)
+                {
+                    counter = service.Id + 1;
+                }
+            }
+            return counter;
         }
 
         public static bool DeleteCustomerId (string customerId)
