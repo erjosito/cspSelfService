@@ -315,14 +315,15 @@ namespace cspWeb.Controllers
             string RgName = ModelTools.GetOfferingRGName("20ApacheVms");
             await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "westeurope");
             string VMId = await ARM.createVMsAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "testVM", "westeurope");
+            int newServiceId = ModelTools.NextServiceId();
 
             Models.Service newService = new Models.Service()
             {
-                Id = ModelTools.NextServiceId(),
+                Id = newServiceId,
                 SubscriptionId = subscription.SubscriptionId,
                 OfferingId = "20ApacheVms",
                 Description = "20 Apache VMs",
-                ResourceId = VMId
+                ResourceId = "dummy"
             };
             db.Services.Add(newService);
             db.SaveChanges();

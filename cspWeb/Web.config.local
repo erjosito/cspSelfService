@@ -11,9 +11,9 @@
       <section name="cspWeb.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
     </sectionGroup>
   </configSections>
-  <connectionStrings>
+  <connectionStrings configSource="connectionStrings.config">
   </connectionStrings>
-  <appSettings>
+  <appSettings configSource="appSettings.config">
   </appSettings>
   <system.web>
     <authentication mode="None" />
