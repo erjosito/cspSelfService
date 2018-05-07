@@ -379,10 +379,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="connectionStrings.config" />
     <Content Include="connectionStrings.config.sample" />
     <Content Include=".gitignore" />
-    <Content Include="appSettings.config" />
     <Content Include="appSettings.config.sample" />
     <None Include="Properties\PublishProfiles\cspWeb-erjosito.pubxml" />
     <None Include="Properties\Settings.settings">
