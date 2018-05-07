@@ -123,7 +123,7 @@ namespace cspWeb.Controllers
         }
 
         // GET: Services/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
@@ -140,9 +140,13 @@ namespace cspWeb.Controllers
         // POST: Services/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
             Service service = db.Services.Find(id);
+            string rgName = ARM.GetResourceGroupNameFromId(id);
+            string subId = ARM.GetSubscriptionFromId(id);
+            var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
+            ARM.deleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
             db.Services.Remove(service);
             db.SaveChanges();
             return RedirectToAction("Index");

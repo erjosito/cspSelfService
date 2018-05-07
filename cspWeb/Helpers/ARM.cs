@@ -103,7 +103,7 @@ namespace cspWeb.Helpers
         }
 
 
-        private static async void deleteResourceGroupAsync(string customerId, string subscriptionId, string groupName)
+        public static async void deleteResourceGroupAsync(string customerId, string subscriptionId, string groupName)
         {
             string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
             if (token != null)
@@ -277,6 +277,42 @@ namespace cspWeb.Helpers
             //return Dummy
             return null;
         }
+
+        // The resource ID has this format:
+        // /subscriptions/2bf8fc82-ec43-4af2-967e-a5992701ef76/resourceGroups/testRg/providers/Microsoft.RecoveryServices/vaults/testVault
+        // The function takes the value after 'resourceGroups'
+        public static string GetResourceGroupNameFromId (string resourceId)
+        {
+            String[] substrings = resourceId.Split('/');
+            string result = "";
+            for (int i = 0; i < substrings.Length; i = i + 1)
+            {
+                if (substrings[i] == "resourceGroups")
+                {
+                    result = substrings[i + 1];
+                }
+            }
+            return result;
+        }
+
+
+        // The resource ID has this format:
+        // /subscriptions/2bf8fc82-ec43-4af2-967e-a5992701ef76/resourceGroups/testRg/providers/Microsoft.RecoveryServices/vaults/testVault
+        // The function takes the value after 'resourceGroups'
+        public static string GetSubscriptionFromId(string resourceId)
+        {
+            String[] substrings = resourceId.Split('/');
+            string result = "";
+            for (int i = 0; i < substrings.Length; i = i + 1)
+            {
+                if (substrings[i] == "subscriptions")
+                {
+                    result = substrings[i + 1];
+                }
+            }
+            return result;
+        }
+
 
 
     }
