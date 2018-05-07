@@ -1,0 +1,13 @@
+﻿<appSettings>
+	<add key="AppId" value="Partner Center App Id" />
+	<add key="AppSecret" value="Partner Center App Secret" />
+	<add key="CspTenantId" value="yourTenantGuid" />
+	<add key="CspUsername" value="yourCSPadmin@yourcspdomain.onmicrosoft.com" />
+	<add key="CspPassword" value="supersecret" />
+	<add key="PowershellAppId" value="1950a258-227b-4e31-a9cf-717495945fc2" />
+
+	<add key="webpages:Version" value="3.0.0.0" />
+	<add key="webpages:Enabled" value="false" />
+	<add key="ClientValidationEnabled" value="true" />
+	<add key="UnobtrusiveJavaScriptEnabled" value="true" />
+</appSettings>
