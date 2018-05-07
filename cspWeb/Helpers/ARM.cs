@@ -20,6 +20,7 @@ using Microsoft.Azure.Management.Resources.Models;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace cspWeb.Helpers
 {
@@ -103,7 +104,7 @@ namespace cspWeb.Helpers
         }
 
 
-        public static async void deleteResourceGroupAsync(string customerId, string subscriptionId, string groupName)
+        public static async Task<bool> DeleteResourceGroupAsync(string customerId, string subscriptionId, string groupName)
         {
             string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
             if (token != null)
@@ -111,11 +112,27 @@ namespace cspWeb.Helpers
                 var credential = new TokenCredentials(token);
                 var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
                 armClient.ResourceGroups.Delete(groupName);
+                return true;
             }
+            return false;
         }
 
 
-
+        // Generate a random string with a given size  
+        public static string RandomString(int size, bool lowerCase=true)
+        {
+            StringBuilder builder = new StringBuilder();
+            Random random = new Random();
+            char ch;
+            for (int i = 0; i < size; i++)
+            {
+                ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
+                builder.Append(ch);
+            }
+            if (lowerCase)
+                return builder.ToString().ToLower();
+            return builder.ToString();
+        }
 
         public static void registerRS(string customerId, string subscriptionId, string rpName)
         {

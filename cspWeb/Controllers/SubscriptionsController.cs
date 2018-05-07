@@ -312,18 +312,18 @@ namespace cspWeb.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "ARM token could not be retrieved for customer " + subscription.CustomerId);
             }
             // Create ARM Resource Group and Recovery Services Vault
-            string RgName = ModelTools.GetOfferingRGName("20ApacheVms");
+            string RgName = ModelTools.GetOfferingRGName("20ApacheVms") + ARM.RandomString(5);
             await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "westeurope");
             string VMId = await ARM.createVMsAsync(subscription.CustomerId, subscription.SubscriptionId, RgName, "testVM", "westeurope");
             int newServiceId = ModelTools.NextServiceId();
 
             Models.Service newService = new Models.Service()
             {
-                Id = newServiceId,
+                //Id = newServiceId,
                 SubscriptionId = subscription.SubscriptionId,
                 OfferingId = "20ApacheVms",
                 Description = "20 Apache VMs",
-                ResourceId = "dummy"
+                ResourceId = RgName
             };
             db.Services.Add(newService);
             db.SaveChanges();

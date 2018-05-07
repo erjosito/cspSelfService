@@ -8,6 +8,9 @@ using System.Web.Mvc;
 using cspWeb.Models;
 using cspWeb.Helpers;
 using Microsoft.AspNet.Identity;
+using System.Threading;
+using System.Threading.Tasks;
+
 
 
 namespace cspWeb.Controllers
@@ -159,15 +162,15 @@ namespace cspWeb.Controllers
         // POST: Services/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int? id)
+        public async Task<ActionResult> DeleteConfirmed(int? id)
         {
             Service service = db.Services.Find(id);
             string resourceId = service.ResourceId;
             string rgName = ARM.GetResourceGroupNameFromId(resourceId);
-            string subId = ARM.GetSubscriptionFromId(resourceId);
+            string subId = service.SubscriptionId;
             // Instead of taking the first customerId, some additional logic would be desirable
             var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
-            ARM.deleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
+            bool deleteOK = await ARM.DeleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
             db.Services.Remove(service);
             db.SaveChanges();
             return RedirectToAction("Index");
