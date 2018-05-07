@@ -19,8 +19,7 @@ using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
 using System.Threading;
 using System.Threading.Tasks;
-
-
+using Newtonsoft.Json.Linq;
 
 namespace cspWeb.Helpers
 {
@@ -102,6 +101,20 @@ namespace cspWeb.Helpers
                 return null;
             }
         }
+
+
+        private static async void deleteResourceGroupAsync(string customerId, string subscriptionId, string groupName)
+        {
+            string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
+            if (token != null)
+            {
+                var credential = new TokenCredentials(token);
+                var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
+                armClient.ResourceGroups.Delete(groupName);
+            }
+        }
+
+
 
 
         public static void registerRS(string customerId, string subscriptionId, string rpName)
@@ -214,6 +227,7 @@ namespace cspWeb.Helpers
             return newVault.Id.ToString();
         }
 
+
         public static void getBackupCredentials(string customerId, string subscriptionId, string groupName, string vaultName)
         {
             string token = REST.getArmToken(customerId, UserAuth: true);
@@ -221,6 +235,49 @@ namespace cspWeb.Helpers
             var backupClient = new RecoveryServicesBackupClient(credential) { SubscriptionId = subscriptionId };
             //backupClient.
         }
+
+        public static async Task<string> createVMsAsync(string customerId, string subscriptionId, string groupName, string vmName, string location)
+        {
+            var myTemplate = "";
+            string templateUrl = "https://raw.githubusercontent.com/erjosito/AzureBlackMagic/master/vnet.json";
+            var webRequest = System.Net.WebRequest.Create(templateUrl);
+            using (var response = webRequest.GetResponse())
+            using (var content = response.GetResponseStream())
+            using (var reader = new StreamReader(content))
+            {
+                myTemplate = reader.ReadToEnd();
+            }
+
+            string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
+            var credential = new TokenCredentials(token);
+
+            var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
+
+            var myParameters = new Dictionary<string, Dictionary<string, object>>{
+                 {"vnetName", new Dictionary<string, object> { {"value", vmName} } }
+            };
+
+
+            var resourceGroupResponse = await armClient.ResourceGroups.CreateOrUpdateAsync(groupName,
+                        new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location });
+
+            var deploymentExtended = await armClient.Deployments.CreateOrUpdateAsync(groupName, vmName,
+                      new Microsoft.Azure.Management.ResourceManager.Models.Deployment
+                      {
+                          Properties = new Microsoft.Azure.Management.ResourceManager.Models.DeploymentProperties
+                          {
+                              Mode = Microsoft.Azure.Management.ResourceManager.Models.DeploymentMode.Incremental,
+                              Template = myTemplate,
+                              Parameters = myParameters
+                          }
+                      });
+
+            var hasSucceeded = deploymentExtended.Properties.ProvisioningState == "Succeeded";
+
+            //return Dummy
+            return null;
+        }
+
 
     }
 }

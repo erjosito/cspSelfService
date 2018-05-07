@@ -236,6 +236,97 @@ namespace cspWeb.Controllers
         }
 
 
+        // GET: Subscriptions/CreateVMs/5
+        public ActionResult CreateVMs(string id)
+        {
+            if (id == null)
+            {
+                // Instead of returning BadRequest, we try first to find out the subscription
+                string userId = User.Identity.GetUserId();
+                var customers = db.Customers.ToList();
+                var customerList = new List<Models.Customer>();
+                customerList = db.Customers.Where(c => c.OwnerId == userId).ToList();
+                if (customerList.Count > 0)
+                {
+                    var subscriptionList = new List<Models.Subscription>();
+                    foreach (var customer in customerList)
+                    {
+                        var customerId = customer.CustomerId;
+                        var thisSubscriptionList = db.Subscriptions.Where(s => s.CustomerId == customerId).ToList();
+                        subscriptionList = subscriptionList.Concat(thisSubscriptionList).ToList();
+                    }
+                    if (subscriptionList.Count == 1)
+                    {
+                        // We pick up the first subscription
+                        // An alternative would be to send the user to the Subscriptions/Index view, so that he chooses the right one
+                        id = subscriptionList[0].SubscriptionId;
+                        return View(subscriptionList[0]);
+                    }
+                    if (subscriptionList.Count > 1)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                        return RedirectToAction("Create");
+                    }
+                }
+                else
+                {
+                    //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return RedirectToAction("../Customers/Create");
+                }
+            }
+            else
+            {
+                Subscription subscription = db.Subscriptions.Find(id);
+                if (subscription == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(subscription);
+            }
+        }
+
+        // POST: Subscriptions/CreateVMs/5
+        [HttpPost, ActionName("CreateVMs")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CreateVMsConfirmed(Models.Subscription sub)
+        {
+            if (sub == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "No subscription passed on to the function to create vault");
+            }
+            string subscriptionId = sub.SubscriptionId;
+            Subscription subscription = db.Subscriptions.Find(subscriptionId);
+            if (subscription == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "A valid Azure subscription could not be found");
+            }
+            // Test auth is working
+            string token = await Helpers.REST.getArmTokenAsync(subscription.CustomerId, UserAuth: true);
+            if (token == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "ARM token could not be retrieved for customer " + subscription.CustomerId);
+            }
+            // Create ARM Resource Group and Recovery Services Vault
+            await ARM.createResourceGroupAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "westeurope");
+            string VMId = await ARM.createVMsAsync(subscription.CustomerId, subscription.SubscriptionId, "testRg", "testVM", "westeurope");
+
+            Models.Service newService = new Models.Service()
+            {
+                SubscriptionId = subscription.SubscriptionId,
+                OfferingId = "20ApacheVms",
+                Description = "20 Apache VMs",
+                Id = VMId
+            };
+            db.Services.Add(newService);
+            db.SaveChanges();
+            return RedirectToAction("../Services/Index");
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

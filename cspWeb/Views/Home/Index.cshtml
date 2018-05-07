@@ -17,6 +17,7 @@
     {
         {
             bool vaultExists = ModelTools.UserIdHasRSVault(userId);
+            vaultExists = false;
             if (vaultExists)
             {
                 @Html.ActionLink("Install Backup Client »", "../Services/Details", "Services", new { @class = "btn btn-primary btn-lg" })
