@@ -150,7 +150,7 @@ namespace cspWeb.Controllers
                 Service service = db.Services.Find(id);
                 if (service == null)
                 {
-                    return HttpNotFound();
+                    return HttpNotFound("I could not find the service " + id);
                 }
                 return View(service);
             }
