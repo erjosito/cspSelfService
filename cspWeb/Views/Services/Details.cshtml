@@ -43,6 +43,8 @@
     </dl>
 </div>
 
+@if (Model.OfferingId == "20ApacheVms")
+{
 <div>
     @{
         string customerId = ModelTools.GetCustomerIdFromSubscriptionID(Model.SubscriptionId);
@@ -68,6 +70,7 @@
         }
     </table>
 </div>
+}
 
 <!--<p><a class="btn btn-primary btn-lg" href="https://go.microsoft.com/fwLink/?LinkID=288905&amp;clcid=0x0407">Download Backup Client &raquo;</a></p>-->
 <p>
