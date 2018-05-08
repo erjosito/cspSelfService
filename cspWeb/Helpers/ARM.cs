@@ -17,6 +17,7 @@ using Microsoft.Azure.Management.RecoveryServices.Backup;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Azure.Management.Resources;
 using Microsoft.Azure.Management.Resources.Models;
+using Microsoft.Azure.Management.Network.Fluent;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -255,8 +256,9 @@ namespace cspWeb.Helpers
 
         public static async Task<string> createVMsAsync(string customerId, string subscriptionId, string groupName, string vmName, string location)
         {
+            // Get Template into a string
             var myTemplate = "";
-            string templateUrl = "https://raw.githubusercontent.com/erjosito/AzureBlackMagic/master/vnet.json";
+            string templateUrl = "https://raw.githubusercontent.com/erjosito/AzureBlackMagic/master/genericLinuxVM-count-templ.json";
             var webRequest = System.Net.WebRequest.Create(templateUrl);
             using (var response = webRequest.GetResponse())
             using (var content = response.GetResponseStream())
@@ -265,19 +267,29 @@ namespace cspWeb.Helpers
                 myTemplate = reader.ReadToEnd();
             }
 
+            // Get token from ARM API
             string token = await REST.getArmTokenAsync(customerId, UserAuth: true);
             var credential = new TokenCredentials(token);
-
             var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
 
+            // Define parameters for template
+            string vmAdminUsername = System.Configuration.ConfigurationManager.AppSettings["vmAdminUsername"];
+            string vmAdminPassword = System.Configuration.ConfigurationManager.AppSettings["vmAdminPassword"];
             var myParameters = new Dictionary<string, Dictionary<string, object>>{
-                 {"vnetName", new Dictionary<string, object> { {"value", vmName} } }
+                 {"vmName", new Dictionary<string, object> { {"value", vmName} } },
+                 {"vmType", new Dictionary<string, object> { {"value", "centos"} } },
+                 {"vmSize", new Dictionary<string, object> { {"value", "Standard_B1s" } } },
+                 {"installExtension", new Dictionary<string, object> { {"value", "yes" } } },
+                 {"adminUsername", new Dictionary<string, object> { {"value", vmAdminUsername } } },
+                 {"adminUsername", new Dictionary<string, object> { {"value", vmAdminPassword } } },
+                 {"vmCount", new Dictionary<string, object> { {"value", 5 } } },
             };
 
-
+            // Create resource group
             var resourceGroupResponse = await armClient.ResourceGroups.CreateOrUpdateAsync(groupName,
                         new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location });
 
+            // Deploy template
             var deploymentExtended = await armClient.Deployments.CreateOrUpdateAsync(groupName, vmName,
                       new Microsoft.Azure.Management.ResourceManager.Models.Deployment
                       {

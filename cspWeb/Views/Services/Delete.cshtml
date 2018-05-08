@@ -38,8 +38,6 @@
         <dd>
             @Html.DisplayFor(model => model.Id)
         </dd>
-
-
     </dl>
 
     @using (Html.BeginForm()) {
@@ -50,4 +48,9 @@
             @Html.ActionLink("Back to List", "Index")
         </div>
     }
+</div>
+
+<div>
+    <hr />
+    <p>Delete virtual machines can take up to 10 minutes, please be patient after hitting the Delete button</p>
 </div>
