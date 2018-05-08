@@ -166,7 +166,17 @@ namespace cspWeb.Controllers
         {
             Service service = db.Services.Find(id);
             string resourceId = service.ResourceId;
-            string rgName = ARM.GetResourceGroupNameFromId(resourceId);
+            string rgName = "";
+            // If we have a resource ID 
+            if (resourceId.Contains("/subscriptions/"))
+            {
+                rgName = ARM.GetResourceGroupNameFromId(resourceId);
+            }
+            // Otherwise it is directly the rgName
+            else
+            {
+                rgName = resourceId;
+            }
             string subId = service.SubscriptionId;
             // Instead of taking the first customerId, some additional logic would be desirable
             var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
