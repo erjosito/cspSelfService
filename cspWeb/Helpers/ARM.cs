@@ -14,19 +14,28 @@ using System.IO;
 using Microsoft.Azure.Management.RecoveryServices;
 using Microsoft.Azure.Management.RecoveryServices.Models;
 using Microsoft.Azure.Management.RecoveryServices.Backup;
-using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Azure.Management.Resources;
+using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Azure.Management.Resources.Models;
+using Microsoft.Azure.Management.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.Network.Fluent;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 
 namespace cspWeb.Helpers
 {
-    public static class ARM
+    public class ARM
     {
+        public class IpAddress
+        {
+            public string Name { get; set; }
+            public string Address { get; set; }
+        }
+
         public static string createResourceGroup(string customerId, string subscriptionId, string groupName, string location)
         {
             string rg = null;
@@ -257,6 +266,8 @@ namespace cspWeb.Helpers
         public static async Task<string> createVMsAsync(string customerId, string subscriptionId, string groupName, string vmName, string location)
         {
             // Get Template into a string
+            // Otherwise, the property "TemplateLink" might be used as well in the deployment creation
+            // See https://docs.microsoft.com/en-us/dotnet/api/microsoft.azure.management.resourcemanager.models.deploymentproperties.templatelink?view=azure-dotnet
             var myTemplate = "";
             string templateUrl = "https://raw.githubusercontent.com/erjosito/AzureBlackMagic/master/genericLinuxVM-count-templ.json";
             var webRequest = System.Net.WebRequest.Create(templateUrl);
@@ -281,7 +292,7 @@ namespace cspWeb.Helpers
                  {"vmSize", new Dictionary<string, object> { {"value", "Standard_B1s" } } },
                  {"installExtension", new Dictionary<string, object> { {"value", "yes" } } },
                  {"adminUsername", new Dictionary<string, object> { {"value", vmAdminUsername } } },
-                 {"adminUsername", new Dictionary<string, object> { {"value", vmAdminPassword } } },
+                 {"adminPassword", new Dictionary<string, object> { {"value", vmAdminPassword } } },
                  {"vmCount", new Dictionary<string, object> { {"value", 5 } } },
             };
 
@@ -290,21 +301,34 @@ namespace cspWeb.Helpers
                         new Microsoft.Azure.Management.ResourceManager.Models.ResourceGroup { Location = location });
 
             // Deploy template
-            var deploymentExtended = await armClient.Deployments.CreateOrUpdateAsync(groupName, vmName,
-                      new Microsoft.Azure.Management.ResourceManager.Models.Deployment
-                      {
-                          Properties = new Microsoft.Azure.Management.ResourceManager.Models.DeploymentProperties
+            // The try loop should catch ARM deployment timeouts
+            try
+            {
+                var deploymentExtended = await armClient.Deployments.CreateOrUpdateAsync(groupName, vmName,
+                          new Microsoft.Azure.Management.ResourceManager.Models.Deployment
                           {
-                              Mode = Microsoft.Azure.Management.ResourceManager.Models.DeploymentMode.Incremental,
-                              Template = myTemplate,
-                              Parameters = myParameters
-                          }
-                      });
+                              Properties = new Microsoft.Azure.Management.ResourceManager.Models.DeploymentProperties
+                              {
+                                  Mode = Microsoft.Azure.Management.ResourceManager.Models.DeploymentMode.Incremental,
+                                  Template = myTemplate,
+                                  Parameters = myParameters
+                              }
+                          });
+                var hasSucceeded = deploymentExtended.Properties.ProvisioningState == "Succeeded";
+                if (hasSucceeded)
+                {
+                    return vmName;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
 
-            var hasSucceeded = deploymentExtended.Properties.ProvisioningState == "Succeeded";
-
-            //return Dummy
-            return null;
         }
 
         // The resource ID has this format:
@@ -342,7 +366,50 @@ namespace cspWeb.Helpers
             return result;
         }
 
+        // Get public IP addresses out of a resource group in Azure
+        public static List<ARM.IpAddress> GetPublicIps(string customerId, string subscriptionId, string groupName)
+        {
+            // Initialize
+            List<IpAddress> output = new List<IpAddress>();
 
+            // Get token from ARM API
+            string token = REST.getArmTokenSync(customerId, UserAuth: true);
+            var credential = new TokenCredentials(token);
+            var armClient = new Microsoft.Azure.Management.ResourceManager.ResourceManagementClient(credential) { SubscriptionId = subscriptionId };
 
+            // Get resources in resource group
+            var resourceList = armClient.Resources.ListByResourceGroup(groupName).ToList();
+            foreach (var resource in resourceList)
+            {
+                if (resource.Type == "Microsoft.Network/publicIPAddresses")
+                {
+                    //var thisresource = armClient.Resources.GetById(resource.Id);
+                    var thisresource = armClient.Resources.GetById(resource.Id, "2018-02-01");
+                    string jsonstring = thisresource.Properties.ToString();
+                    JToken jtoken = JObject.Parse(jsonstring);
+                    string ipAddress = (string)jtoken.SelectToken("ipAddress");
+                    if (!thisresource.Name.Contains("slb")) {
+                        ARM.IpAddress newIp = new ARM.IpAddress();
+                        newIp.Address = ipAddress;
+                        newIp.Name = thisresource.Name.Replace("-pip","");
+                        output.Add(newIp);
+                    }
+                }
+            }
+
+            // Return everything
+            return output;
+        }
+
+        public static string ListToHtml(List<string> listofstrings)
+        {
+            string aux = "<ul>";
+            foreach (string element in listofstrings)
+            {
+                aux = aux + "<li>" + element + "</li>";
+            }
+            aux += "</ul>";
+            return aux;
+        }
     }
 }

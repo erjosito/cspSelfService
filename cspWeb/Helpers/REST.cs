@@ -210,5 +210,42 @@ namespace cspWeb.Helpers
             }
             return token;
         }
+        public static string getArmTokenSync(string TenantId, bool UserAuth = false)
+        {
+            string contentType = "application/x-www-form-urlencoded";
+            string url = "";
+            string payload = "";
+            if (UserAuth)
+            //App+User auth
+            {
+                url = "https://login.windows.net/" + TenantId + "/oauth2/token?api-version=1.0";
+                string resource = "https://management.azure.com/";
+                payload = "grant_type=password&resource=" + resource
+                           + "&username=" + CspUsername + "&password=" + CspPassword
+                           + "&client_id=" + PowershellAppId + "&scope=openid";
+            }
+            else
+            //App-only auth
+            {
+                url = "https://login.windows.net/" + TenantId + "/oauth2/token";
+                string resource = "https://management.azure.com/";
+                payload = "grant_type=client_credentials&resource=" + resource + "&client_id="
+                          + ApplicationId + "&client_secret=" + ApplicationSecret;
+            }
+            //JObject jsonResponse = sendHttpRequestAsync("POST", url, payload: payload, contentType: contentType).GetAwaiter().GetResult();
+            JObject jsonResponse = sendHttpRequest("POST", url, payload: payload, contentType: contentType);
+            string token = null;
+            try
+            {
+                token = jsonResponse["access_token"].ToString();
+            }
+            catch
+            {
+                return null;
+            }
+            return token;
+        }
+
+
     }
 }

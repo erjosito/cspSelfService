@@ -1,4 +1,5 @@
 ﻿@using cspWeb.Properties
+@using cspWeb.Helpers
 
 @model cspWeb.Models.Service
 
@@ -41,6 +42,33 @@
         </dd>
     </dl>
 </div>
+
+<div>
+    @{
+        string customerId = ModelTools.GetCustomerIdFromSubscriptionID(Model.SubscriptionId);
+        List<ARM.IpAddress> ipList = ARM.GetPublicIps(customerId, Model.SubscriptionId, Model.ResourceId);
+        string vmAdminUsername = System.Configuration.ConfigurationManager.AppSettings["vmAdminUsername"];
+        string vmAdminPassword = System.Configuration.ConfigurationManager.AppSettings["vmAdminPassword"];
+    }
+    <table class="table">
+        <tr>
+            <th>VM name</th>
+            <th>IP address</th>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+        @foreach (ARM.IpAddress item in ipList)
+        {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Address</td>
+            <td>@vmAdminUsername</td>
+            <td>@vmAdminPassword</td>
+        </tr>
+        }
+    </table>
+</div>
+
 <!--<p><a class="btn btn-primary btn-lg" href="https://go.microsoft.com/fwLink/?LinkID=288905&amp;clcid=0x0407">Download Backup Client &raquo;</a></p>-->
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |

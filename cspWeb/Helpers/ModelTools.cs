@@ -57,6 +57,19 @@ namespace cspWeb.Helpers
             return db.Subscriptions.Where(s => s.CustomerId == customerId).ToList();
         }
 
+        public static string GetCustomerIdFromSubscriptionID(string subscriptionId)
+        {
+            List<Models.Subscription> subscriptionList = db.Subscriptions.Where(s => s.SubscriptionId == subscriptionId).ToList();
+            if (subscriptionList.Count > 0)
+            {
+                return subscriptionList[0].CustomerId;
+            } else
+            {
+                return null;
+            }
+        }
+
+
         public static List<Models.Service> GetServicesFromSubscriptionID(string subscriptionId)
         {
             return db.Services.Where(s => s.SubscriptionId == subscriptionId).ToList();
