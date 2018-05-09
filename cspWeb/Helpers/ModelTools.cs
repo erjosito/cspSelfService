@@ -166,6 +166,22 @@ namespace cspWeb.Helpers
             return rgName;
         }
 
+        public static bool IsActive(string OfferingId)
+        {
+            // Loop through all subs belonging to the customer
+            var offeringsList = db.Offerings.ToList();
+            foreach (var offering in offeringsList)
+            {
+                if (offering.Id == OfferingId)
+                {
+                    return offering.Available;
+                }
+            }
+            return false;
+        }
+
+
+
         public static int NextServiceId()
         {
             //Initialization

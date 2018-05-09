@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<cspWeb.Models.Service>
+@using cspWeb.Helpers
 
 @{
     ViewBag.Title = "Index";
@@ -21,51 +22,52 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.SubscriptionId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @{
-        string subscriptionId = item.SubscriptionId;
-        string description = item.Description;
-        string offeringId = item.OfferingId;
-            }
-            @if (subscriptionId == null)
+    @foreach (var item in Model)
     {
-        if (offeringId == "RSVault")
-        {
-            @Html.ActionLink("Buy " + description + " »", "../Subscriptions/CreateVault", "Subscriptions", new { @class = "btn btn-default" })
-        }
-        else if (offeringId == "20ApacheVms")
-        {
-                @Html.ActionLink("Buy " + description + " »", "../Subscriptions/CreateVMs", "Subscriptions", new { @class = "btn btn-default" })
-        }
-        else
-        {
-            string sorryMsg = "Offering not available for purchasing yet";
-            @sorryMsg;
-        }
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubscriptionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @{
+                    string subscriptionId = item.SubscriptionId;
+                    string description = item.Description;
+                    string offeringId = item.OfferingId;
+                }
+                @if (subscriptionId == null)
+                {
+                    if (offeringId == "RSVault" && ModelTools.IsActive(offeringId))
+                    {
+                        @Html.ActionLink("Buy " + description + " »", "../Subscriptions/CreateVault", "Subscriptions", new { @class = "btn btn-default" })
+                    }
+                    else if (offeringId == "20ApacheVms" && ModelTools.IsActive(offeringId))
+                    {
+                        @Html.ActionLink("Buy " + description + " »", "../Subscriptions/CreateVMs", "Subscriptions", new { @class = "btn btn-default" })
+                    }
+                    else
+                    {
+                        string sorryMsg = "Offering not available for purchasing yet";
+                        @sorryMsg;
+                    }
+                }
+                else
+                {
+                    string useMsg = "You own this";
+                    @useMsg;<br>
+                    @Html.ActionLink("Details »", "Details", "Services", new { @class = "btn btn-primary btn-lg" })
+                    //@Html.ActionLink("Delete »", "Details", "Services", new { @class = "btn btn-primary btn-lg" })
+                    //string separator = " | ";
+                    //@Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                    //@separator
+                    //@Html.ActionLink("Details", "Details", new { id = item.Id })
+                    //@separator
+                    //@Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                }
+            </td>
+        </tr>
     }
-    else
-    {
-        string useMsg = "You own this";
-        @useMsg;<br>
-        @Html.ActionLink("Details »", "Details", "Services", new { @class = "btn btn-primary btn-lg" })
-        //@Html.ActionLink("Delete »", "Details", "Services", new { @class = "btn btn-primary btn-lg" })
-        //string separator = " | ";
-        //@Html.ActionLink("Edit", "Edit", new { id = item.Id })
-        //@separator
-        //@Html.ActionLink("Details", "Details", new { id = item.Id })
-        //@separator
-        //@Html.ActionLink("Delete", "Delete", new { id = item.Id })
-    }
-    </td>
-    </tr>
-}
 
 </table>
