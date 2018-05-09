@@ -304,6 +304,8 @@ namespace cspWeb.Helpers
             // The try loop should catch ARM deployment timeouts
             try
             {
+
+                /*
                 Task<Microsoft.Azure.Management.ResourceManager.Models.DeploymentExtended> deploymentTask = armClient.Deployments.CreateOrUpdateAsync(groupName, vmName,
                           new Microsoft.Azure.Management.ResourceManager.Models.Deployment
                           {
@@ -316,6 +318,19 @@ namespace cspWeb.Helpers
                           });
 
                 ForgetTask(deploymentTask);
+                */
+
+                Task.Run(() => armClient.Deployments.CreateOrUpdateAsync(groupName, vmName,
+                          new Microsoft.Azure.Management.ResourceManager.Models.Deployment
+                          {
+                              Properties = new Microsoft.Azure.Management.ResourceManager.Models.DeploymentProperties
+                              {
+                                  Mode = Microsoft.Azure.Management.ResourceManager.Models.DeploymentMode.Incremental,
+                                  Template = myTemplate,
+                                  Parameters = myParameters
+                              }
+                          }));
+
                 /*
                 var hasSucceeded = deploymentExtended.Properties.ProvisioningState == "Succeeded";
                 if (hasSucceeded)
@@ -418,13 +433,13 @@ namespace cspWeb.Helpers
         }
 
 
-        private static async void ForgetTask(this Task task)
+        public static async void ForgetTask(this Task task)
         {
             try
             {
                 await task.ConfigureAwait(false);
             }
-            catch
+            catch (Exception e)
             {
             }
         }

@@ -182,7 +182,8 @@ namespace cspWeb.Controllers
             var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
             db.Services.Remove(service);
             db.SaveChanges();
-            bool deleteOK = await ARM.DeleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
+            Task<bool> deleteTask = ARM.DeleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
+            ARM.ForgetTask(deleteTask);
             return RedirectToAction("Index");
         }
 
