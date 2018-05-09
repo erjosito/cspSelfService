@@ -162,7 +162,7 @@ namespace cspWeb.Controllers
         // POST: Services/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int? id)
+        public ActionResult DeleteConfirmed(int? id)
         {
             Service service = db.Services.Find(id);
             string resourceId = service.ResourceId;
@@ -182,8 +182,7 @@ namespace cspWeb.Controllers
             var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
             db.Services.Remove(service);
             db.SaveChanges();
-            Task<bool> deleteTask = ARM.DeleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
-            ARM.ForgetTask(deleteTask);
+            Task.Run(() => ARM.DeleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName));
             return RedirectToAction("Index");
         }
 
