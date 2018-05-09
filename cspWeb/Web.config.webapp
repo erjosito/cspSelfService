@@ -102,7 +102,7 @@
         <value>https://api.partnercenter.microsoft.com/v1</value>
       </setting>
       <setting name="AzureOfferId" serializeAs="String">
-        <value>MS-AZR-0146P</value>
+        <value>MS-AZR-0145P</value>
       </setting>
       <setting name="PowershellAppId" serializeAs="String">
         <value>1950a258-227b-4e31-a9cf-717495945fc2</value>
