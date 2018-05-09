@@ -28,7 +28,7 @@ using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 
 namespace cspWeb.Helpers
 {
-    public class ARM
+    public static class ARM
     {
         public class IpAddress
         {
@@ -315,7 +315,7 @@ namespace cspWeb.Helpers
                               }
                           });
 
-                Forget(deploymentTask);
+                ForgetTask(deploymentTask);
                 /*
                 var hasSucceeded = deploymentExtended.Properties.ProvisioningState == "Succeeded";
                 if (hasSucceeded)
@@ -418,7 +418,7 @@ namespace cspWeb.Helpers
         }
 
 
-        private static async void Forget(this Task task)
+        private static async void ForgetTask(this Task task)
         {
             try
             {
