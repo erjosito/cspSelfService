@@ -6,7 +6,7 @@
       <Value Profile="(Default)">https://api.partnercenter.microsoft.com/v1</Value>
     </Setting>
     <Setting Name="AzureOfferId" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">MS-AZR-0146P</Value>
+      <Value Profile="(Default)">MS-AZR-0145P</Value>
     </Setting>
     <Setting Name="PowershellAppId" Type="System.String" Scope="Application">
       <Value Profile="(Default)">1950a258-227b-4e31-a9cf-717495945fc2</Value>
