@@ -180,9 +180,9 @@ namespace cspWeb.Controllers
             string subId = service.SubscriptionId;
             // Instead of taking the first customerId, some additional logic would be desirable
             var customerList = ModelTools.GetCustomersFromUserID(User.Identity.GetUserId());
-            bool deleteOK = await ARM.DeleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
             db.Services.Remove(service);
             db.SaveChanges();
+            bool deleteOK = await ARM.DeleteResourceGroupAsync(customerList[0].CustomerId, subId, rgName);
             return RedirectToAction("Index");
         }
 
